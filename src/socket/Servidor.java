@@ -24,8 +24,10 @@ public class Servidor extends javax.swing.JFrame {
     static Socket socket;
     static DataInputStream din;
     static DataOutputStream dout;
+    
     public Servidor() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -149,18 +151,25 @@ public class Servidor extends javax.swing.JFrame {
             }
         });
         
+        System.out.println("Aguardando conexão...");
+        
         String msgin = "";
         try{
             String port = JOptionPane.showInputDialog("Informe a porta para conectar...");
             serverSocket = new ServerSocket(Integer.parseInt(port));
             JOptionPane.showMessageDialog(null, "Conexão feita na porta: " + port, "Sucesso!", INFORMATION_MESSAGE);
+            String nome = JOptionPane.showInputDialog("Informe seu nome...");
             socket = serverSocket.accept();
+            
+            System.out.println("Conexão feita com sucesso no IP: 127.0.0.1");
+            System.out.println(nome + " entrou no chat!");
+            
             din = new DataInputStream(socket.getInputStream());
             dout = new DataOutputStream(socket.getOutputStream());
             
             while(!msgin.equals("exit")){
                 msgin = din.readUTF();
-                txtArea.setText(txtArea.getText().trim()+"\n Cliente:\t"+msgin);
+                txtArea.setText(txtArea.getText().trim()+nome+":\n"+msgin);
             }
         }catch(Exception e){
             
